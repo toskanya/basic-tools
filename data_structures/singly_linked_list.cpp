@@ -161,7 +161,7 @@ string IntSLinkedList::toString() {
 
     if (count > 0) {
         ss << current->data << "]";
-    }
+    }   
     else ss << "]";
 
     return ss.str();
@@ -200,3 +200,7 @@ int IntSLinkedList::indexOf(int item) {
 
     return -1;
 } 
+
+IntSLinkedList::~IntSLinkedList() {
+    this->clear();
+}

@@ -3,7 +3,6 @@
 
 #include "array.h"
 
-
 class IntSLinkedList : public Ilist<int> {
 public:
     class Node; // Forward declaration
@@ -18,6 +17,7 @@ private:
 
 public:
     IntSLinkedList();
+    ~IntSLinkedList();
 
     class Node {
     public:
@@ -41,7 +41,7 @@ public:
     int size();
     bool empty();
     void clear();
-    int indexOf(int item);
+    int indexOf(int item);      
 };
 
 #endif
