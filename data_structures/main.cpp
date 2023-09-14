@@ -1,6 +1,8 @@
 #include "integer_array.cpp"
 #include "singly_linked_list.cpp"
+#include "doubly_linked_list.cpp"
 #include "heap.cpp"
+
 
 void intList() {
     IntArrayList test;
@@ -79,6 +81,40 @@ void linkedList() {
     cout << test.contains(2) << endl;
 }
 
+void doubleLinkedList() {
+    IntSDoubleLinkedList test;
+
+    test.add(1);
+    test.add(2);
+    test.add(3);
+    test.add(4);
+    test.add(5);
+    test.add(6);
+    cout << test.toString() << endl;
+
+    test.reverse();
+    cout << test.toString() << endl;
+
+    test.add(2, 10);
+    cout << test.toString() << endl;
+
+    test.set(3, 100);
+    cout << test.toString() << endl;
+
+    test.removeAt(0);
+    test.removeItem(1);
+    cout << test.toString() << endl;
+
+    cout << test.indexOf(100) << " " << test.size() << " " << test.contains(10) << endl;
+
+    test.reverse();
+    cout << test.toString() << endl;
+
+    test.clear();
+    cout << test.toString() << endl;
+
+}
+
 void heap() {
     Heap test;
 
@@ -108,9 +144,13 @@ int main() {
             linkedList();
             break;
         case 3:
+            doubleLinkedList();
+            break;
+        case 4:
             heap();
             break;
     }
 
     return 0;
 }
+
