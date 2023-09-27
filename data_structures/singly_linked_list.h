@@ -1,9 +1,8 @@
 #ifndef _SINGLY_LINKED_LIST_
 #define _SINGLY_LINKED_LIST_
 
-#include "array.h"
-
-class IntSLinkedList : public Ilist<int> {
+template <class T>
+class LinkedList {
 public:
     class Node; // Forward declaration
 
@@ -16,32 +15,34 @@ private:
     void checkIndex(int index);
 
 public:
-    IntSLinkedList();
-    ~IntSLinkedList();
+    LinkedList();
+    ~LinkedList();
 
     class Node {
     public:
-        int data;
+        T data;
         Node * next;
 
         Node() {
             this->data = 0;
             this->next = nullptr;
         }
+
+        Node(T data, Node * next) : data(data), next(next) {}
     };
 
-    void add(int element);
-    void add(int index, int element);
+    void add(T element);
+    void add(int index, T element);
     int removeAt(int index);
-    bool removeItem(int item);
+    bool removeItem(T item);
     int get(int index);
-    void set(int index, int element);
-    bool contains(int item);
+    void set(int index, T element);
+    bool contains(T item);
     string toString();
     int size();
     bool empty();
     void clear();
-    int indexOf(int item);      
+    int indexOf(T item);      
 };
 
 #endif

@@ -52,7 +52,7 @@ void IntArrayList::add(int index, int element) {
     }
 
     this->data[index] = element;
-    count++;
+    this->count++;
 }
 
 int IntArrayList::removeAt(int index) {
@@ -142,3 +142,4 @@ void IntArrayList::dump() {
     cout << "Data: " << toString() << endl;
     cout << line << endl;
 }
+

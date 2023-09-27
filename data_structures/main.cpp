@@ -38,47 +38,54 @@ void intList() {
 }
 
 void linkedList() {
-    IntSLinkedList test;
+    LinkedList<int> list; // Creating an instance of LinkedList
 
-    test.add(2);
-    test.add(3);
-    cout << test.size() << endl;
-    cout << test.toString() << endl;
+    // Adding elements to the list
+    list.add(10);
+    list.add(20);
+    list.add(30);
+    list.add(40);
 
-    test.clear();
-    cout << test.size() << endl;
-    cout << test.toString() << endl << endl;
+    // Printing the list
+    cout << "List: " << list.toString() << endl; // Output: List: [10, 20, 30, 40]
 
-    for (int i = 0; i < 6; i++) {
-        test.add(rand() % 10);
-    }
-    
-    cout << test.toString() << endl;
+    // Adding an element at index 2
+    list.add(2, 25);
+    cout << "List after adding 25 at index 2: " << list.toString() << endl; // Output: List after adding 25 at index 2: [10, 20, 25, 30, 40]
 
-    test.removeAt(0);
-    test.removeAt(2);
-    cout << test.toString() << endl;
-    test.removeItem(4);
-    cout << test.toString() << endl;
-    test.removeItem(4);
-    cout << test.toString() << endl;
-    test.removeAt(1);
-    cout << test.toString() << endl;
-    test.removeItem(7);
+    // Removing element at index 3
+    int removedElement = list.removeAt(3);
+    cout << "Removed element at index 3: " << removedElement << endl; // Output: Removed element at index 3: 30
+    cout << "List after removal: " << list.toString() << endl;        // Output: List after removal: [10, 20, 25, 40]
 
-    cout << test.toString() << endl;
+    // Removing item 20
+    bool itemRemoved = list.removeItem(20);
+    cout << "Item 20 removed: " << (itemRemoved ? "true" : "false") << endl; // Output: Item 20 removed: true
+    cout << "List after removal: " << list.toString() << endl;               // Output: List after removal: [10, 25, 40]
 
-    cout << test.empty() << endl;
+    // Getting element at index 1
+    int element = list.get(1);
+    cout << "Element at index 1: " << element << endl; // Output: Element at index 1: 25
 
-    cout << test.size() << endl;
+    // Setting element at index 0 to 5
+    list.set(0, 5);
+    cout << "List after setting index 0 to 5: " << list.toString() << endl; // Output: List after setting index 0 to 5: [5, 25, 40]
 
-    test.add(7);
+    // Checking if list contains 25
+    bool contains25 = list.contains(25);
+    cout << "List contains 25: " << (contains25 ? "true" : "false") << endl; // Output: List contains 25: true
 
-    cout << test.toString() << endl;
+    // Getting the size of the list
+    int size = list.size();
+    cout << "Size of the list: " << size << endl; // Output: Size of the list: 3
 
-    cout << test.indexOf(4) << endl;
-    cout << test.contains(7) << endl;
-    cout << test.contains(2) << endl;
+    // Checking if the list is empty
+    bool isEmpty = list.empty();
+    cout << "List is empty: " << (isEmpty ? "true" : "false") << endl; // Output: List is empty: false
+
+    // Clearing the list
+    list.clear();
+    cout << "List after clearing: " << list.toString() << endl; // Output: List after clearing: []
 }
 
 void doubleLinkedList() {
@@ -133,7 +140,7 @@ void heap() {
 }
 
 int main() {
-    int choice = 3;
+    int choice = 2;
     //cin >> choice;
 
     switch (choice) {

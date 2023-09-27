@@ -1,83 +1,96 @@
 #include "main.h"
 #include "singly_linked_list.h"
 
-IntSLinkedList::IntSLinkedList() {
-    this->head = new Node();
-    this->tail = new Node();
+template <class T>
+LinkedList<T>::LinkedList()
+{
+    this->head = nullptr;
+    this->tail = nullptr;
     count = 0;
 }
 
-void IntSLinkedList::checkIndex(int index) {
+template <class T>
+LinkedList<T>::~LinkedList()
+{
+    this->clear();
+}
+
+template <class T>
+void LinkedList<T>::checkIndex(int index)
+{
     if (index < 0 || index >= this->count)
         throw out_of_range("Index is out of range");
 }
 
-void IntSLinkedList::add(int element) {
-    if (this->count == 0) {
-        Node * temp = new Node();
-        temp->data = element;
+template <class T>
+void LinkedList<T>::add(T element)
+{
+    Node * temp = new Node(element, nullptr);
 
-        this->head->next = temp;
-        this->tail->next = temp;
+    if (this->head == nullptr) {
+        this->head = temp;
+        this->tail = temp;
     }
     else {
-        Node * temp = new Node();
-        temp->data = element;
-        Node * current = this->head;
-
-        while (current != tail->next) {
-            current = current->next;
-        }
-
-        current->next = temp;
         this->tail->next = temp;
+        this->tail = temp;
     }
 
     this->count++;
 }
 
-void IntSLinkedList::add(int index, int element) {
-    checkIndex(index);
+template <class T>
+void LinkedList<T>::add(int index, T element)
+{
+    this->checkIndex(index);
 
-    if (index == count - 1)
-        add(element);
+    Node * temp = new Node(element, nullptr);
+
+    if (index == 0) {
+        temp->next = this->head;
+        this->head = temp;
+    }
     else {
-        Node * temp = new Node();
-        temp->data = element;
         Node * current = this->head;
 
-        for (int i = 0; i < index; i++) {
+        for (int i = 1; i < index; i++) {
             current = current->next;
         }
 
         temp->next = current->next;
         current->next = temp;
+    }
 
-        this->count++;
-    } 
+    this->count++;
 }
 
-int IntSLinkedList::removeAt(int index) {
-    checkIndex(index);
+template <class T>
+int LinkedList<T>::removeAt(int index)
+{
+    this->checkIndex(index);
 
-    Node * temp;
-    Node * current = this->head;
+    T remove_element;
 
-    if (index == 0 && count == 1) {
-        temp = current->next;
-        this->head = new Node();
-        this->tail = new Node();
+    if (index == 0) {
+        remove_element = this->head->data;
+        this->head = this->head->next;
+
+        if (this->head == nullptr) {
+            this->tail = nullptr;
+        }
     }
     else {
-        for (int i = 0; i < index; i++) {
+        Node * current = this->head;
+
+        for (int i = 1; i < index; i++){
             current = current->next;
         }
 
-        temp = current->next;
+        remove_element = current->data;
 
-        if (index == count - 1) {
-            this->tail->next = current;
-            current->next = nullptr;
+        if (current->next == this->tail) {
+            this->tail = current;
+            this->tail->next = nullptr;
         }
         else {
             current->next = current->next->next;
@@ -85,51 +98,69 @@ int IntSLinkedList::removeAt(int index) {
     }
 
     this->count--;
-    return temp->data;
+    return remove_element;
 }
 
-bool IntSLinkedList::removeItem(int item) {
+template <class T>
+bool LinkedList<T>::removeItem(T item)
+{
     Node * current = this->head;
-    int index = 0;
+    Node * previous = nullptr;
 
     while (current != nullptr) {
         if (current->data == item) {
-            removeAt(index - 1);
+            if (current == this->head) {
+                this->head = this->head->next;
+            }
+            else {
+                previous->next = current->next;
+            }
+
+            this->count--;
+            if (this->count == 0) {
+                this->tail = nullptr;
+            }
+
             return true;
         }
-
-        index++;
+        previous = current;
         current = current->next;
     }
 
     return false;
 }
 
-int IntSLinkedList::get(int index) {
-    checkIndex(index);
+template <class T>
+int LinkedList<T>::get(int index)
+{
+    this->checkIndex(index);
 
     Node * current = this->head;
 
-    for (int i = 0; i <= index; i++) {
+    for (int i = 0; i < index; i++) {
         current = current->next;
     }
 
     return current->data;
 }
 
-void IntSLinkedList::set(int index, int element) {
+template <class T>
+void LinkedList<T>::set(int index, T element)
+{
     checkIndex(index);
 
     Node * current = this->head;
 
-    for (int i = 0; i <= index; i++) {
+    for (int i = 0; i < index; i++) {
         current = current->next;
     }
 
     current->data = element;
 }
 
-bool IntSLinkedList::contains(int item) {
+template <class T>
+bool LinkedList<T>::contains(T item)
+{
     Node * current = this->head;
 
     while (current != nullptr) {
@@ -143,64 +174,71 @@ bool IntSLinkedList::contains(int item) {
     return false;
 }
 
-int IntSLinkedList::size() {
+template <class T>
+int LinkedList<T>::size()
+{
     return this->count;
 }
 
-string IntSLinkedList::toString() {
+template <class T>
+string LinkedList<T>::toString()
+{
+    if (this->empty()) {
+        return "[]";
+    }
+
     stringstream ss;
     ss << "[";
 
-    Node * current = this->head->next;
+    Node * current = this->head;
 
-    for (int i = 0; i < count - 1; i++) {
+    while (current->next != nullptr) {
         ss << current->data << ", ";
         
         current = current->next;
     }
 
-    if (count > 0) {
-        ss << current->data << "]";
-    }   
-    else ss << "]";
+    ss << current->data << "]";
 
     return ss.str();
 }
 
-void IntSLinkedList::clear() {
-    Node * temp;
+template <class T>
+void LinkedList<T>::clear()
+{
     Node * current = this->head;
+    Node * temp = nullptr;
 
     while (current != nullptr) {
-        temp = current->next;
-        delete current;
-        current = temp;
+        temp = current;
+        current = current->next;
+        delete temp;
     }
 
-    this->head = new Node();
-    this->tail = new Node();
+    this->tail = nullptr;
     this->count = 0;
 }
 
-bool IntSLinkedList::empty() {
+template <class T>
+bool LinkedList<T>::empty()
+{
     return this->count == 0;
 }
 
-int IntSLinkedList::indexOf(int item) {
+template <class T>
+int LinkedList<T>::indexOf(T item)
+{
     Node * current = this->head;
     int index = 0;
     
-    while (current != tail->next) {
+    while (current != nullptr) {
         if (current->data == item) {
             return index;
         }
         
         current = current->next;
+        index++;
     }
 
     return -1;
-} 
-
-IntSLinkedList::~IntSLinkedList() {
-    this->clear();
 }
