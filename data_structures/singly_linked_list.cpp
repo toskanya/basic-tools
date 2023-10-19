@@ -25,18 +25,7 @@ void LinkedList<T>::checkIndex(int index)
 template <class T>
 void LinkedList<T>::add(T element)
 {
-    Node * temp = new Node(element, nullptr);
-
-    if (this->head == nullptr) {
-        this->head = temp;
-        this->tail = temp;
-    }
-    else {
-        this->tail->next = temp;
-        this->tail = temp;
-    }
-
-    this->count++;
+    this->add(this->count, element);
 }
 
 template <class T>
@@ -46,9 +35,17 @@ void LinkedList<T>::add(int index, T element)
 
     Node * temp = new Node(element, nullptr);
 
-    if (index == 0) {
+    if (count == 0) {
+        this->head = temp;
+        this->tail = temp;
+    }
+    else if (index == 0) {
         temp->next = this->head;
         this->head = temp;
+    }
+    else if (index == count) {
+        tail->next = temp;
+        tail = temp;
     }
     else {
         Node * current = this->head;
@@ -242,3 +239,4 @@ int LinkedList<T>::indexOf(T item)
 
     return -1;
 }
+     

@@ -22,3 +22,6 @@ int main() {
 
     return 0;
 }
+A C B
+A B C
+A C B

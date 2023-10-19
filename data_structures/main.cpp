@@ -49,6 +49,7 @@ void linkedList() {
     // Printing the list
     cout << "List: " << list.toString() << endl; // Output: List: [10, 20, 30, 40]
 
+
     // Adding an element at index 2
     list.add(2, 25);
     cout << "List after adding 25 at index 2: " << list.toString() << endl; // Output: List after adding 25 at index 2: [10, 20, 25, 30, 40]
@@ -89,37 +90,102 @@ void linkedList() {
 }
 
 void doubleLinkedList() {
-    IntSDoubleLinkedList test;
+    //DLinkedList<int> list;
 
-    test.add(1);
-    test.add(2);
-    test.add(3);
-    test.add(4);
-    test.add(5);
-    test.add(6);
-    cout << test.toString() << endl;
+    // // Test add and toString
+    // list.add(10);
+    // list.add(20);
+    // list.add(30);
 
-    test.reverse();
-    cout << test.toString() << endl;
+    // std::cout << "List: " << list.toString() << std::endl; // Output: List: [10, 20, 30]
 
-    test.add(2, 10);
-    cout << test.toString() << endl;
+    // // Test add at index
+    // list.add(1, 15);
 
-    test.set(3, 100);
-    cout << test.toString() << endl;
+    // std::cout << "List: " << list.toString() << std::endl; // Output: List: [10, 15, 20, 30]
 
-    test.removeAt(0);
-    test.removeItem(1);
-    cout << test.toString() << endl;
+    // // Test reverse
+    // list.reverse();
 
-    cout << test.indexOf(100) << " " << test.size() << " " << test.contains(10) << endl;
+    // std::cout << "List: " << list.toString() << std::endl;
 
-    test.reverse();
-    cout << test.toString() << endl;
+    // // Test get
+    // int value = list.get(2);
 
-    test.clear();
-    cout << test.toString() << endl;
+    // std::cout << "Value at index 2: " << value << std::endl; // Output: Value at index 2: 20
 
+    // // Test set
+    // list.set(0, 5);
+
+    // std::cout << "List after set: " << list.toString() << std::endl; // Output: List after set: [5, 15, 20, 30]
+
+    // // Test contains
+    // bool contains15 = list.contains(15);
+    // bool contains25 = list.contains(25);
+
+    // std::cout << "Contains 15: " << contains15 << std::endl; // Output: Contains 15: 1 (true)
+    // std::cout << "Contains 25: " << contains25 << std::endl; // Output: Contains 25: 0 (false)
+
+    // // Test size and empty
+    // int size = list.size();
+    // bool isEmpty = list.empty();
+
+    // std::cout << "Size: " << size << std::endl;        // Output: Size: 4
+    // std::cout << "Is Empty: " << isEmpty << std::endl; // Output: Is Empty: 0 (false)
+
+    // // Test removeAt
+    // int removedValue = list.removeAt(1);
+
+    // std::cout << "Removed value: " << removedValue << std::endl;          // Output: Removed value: 15
+    // std::cout << "List after removeAt: " << list.toString() << std::endl; // Output: List after removeAt: [5, 20, 30]
+
+    // // Test removeItem
+    // bool removed30 = list.removeItem(30);
+    // bool removed25 = list.removeItem(25);
+
+    // std::cout << "Removed 30: " << removed30 << std::endl;                  // Output: Removed 30: 1 (true)
+    // std::cout << "Removed 25: " << removed25 << std::endl;                  // Output: Removed 25: 0 (false)
+    // std::cout << "List after removeItem: " << list.toString() << std::endl; // Output: List after removeItem: [5, 20]
+
+    // // Test indexOf
+    // int index20 = list.indexOf(20);
+    // int index15 = list.indexOf(15);
+
+    // std::cout << "Index of 20: " << index20 << std::endl; // Output: Index of 20: 1
+    // std::cout << "Index of 15: " << index15 << std::endl; // Output: Index of 15: -1
+
+    // // Test clear and empty
+    // list.clear();
+    // isEmpty = list.empty();
+
+    // std::cout << "Is Empty after clear: " << isEmpty << std::endl; // Output: Is Empty after clear: 1 (true)
+
+    // for (int idx = 0; idx < 10; idx++)
+    // {
+    //     list.add(idx);
+    // }
+
+    // DLinkedList<int>::Iterator it = list.begin();
+    // while (it != list.end())
+    // {
+    //     it.remove();
+    // }
+    // cout << list.toString();
+
+    DLinkedList<int> list;
+    int size = 10;
+    for (int idx = 0; idx < size; idx++)
+    {
+        list.add(idx);
+    }
+
+    DLinkedList<int>::Iterator it = list.begin();
+    for (; it != list.end();)
+    {
+        it.remove();
+        it++;
+    }
+    cout << list.toString();
 }
 
 void heap() {
@@ -140,7 +206,7 @@ void heap() {
 }
 
 int main() {
-    int choice = 2;
+    int choice = 3;
     //cin >> choice;
 
     switch (choice) {

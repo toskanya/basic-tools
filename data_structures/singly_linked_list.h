@@ -6,7 +6,7 @@ class LinkedList {
 public:
     class Node; // Forward declaration
 
-protected:
+public:
     Node * head;
     Node * tail;
     int count;
@@ -42,7 +42,8 @@ public:
     int size();
     bool empty();
     void clear();
-    int indexOf(T item);      
+    int indexOf(T item);
+    void replace(LinkedList * linked_list, int low, int high);
 };
 
 #endif

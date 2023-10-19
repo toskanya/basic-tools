@@ -3,46 +3,87 @@
 
 #include "array.h"
 
-class IntSDoubleLinkedList : public Ilist<int> {
+template <class T>
+class DLinkedList
+{
 public:
     class Node;
 
-private:
+    class Iterator;
+
+protected:
     Node * head;
+    Node * tail;
     int count;
 
     void checkIndex(int index);
 
 public:
-    IntSDoubleLinkedList();
-    ~IntSDoubleLinkedList();
+    DLinkedList();
+    ~DLinkedList();
 
-    class Node {
-    public:
-        int data;
-        Node * next;
-        Node * pre;
-
-        Node() {
-            this->data = 0;
-            this->next = nullptr;
-            this->pre = nullptr;
-        }
-    };
-
-    void add(int element);
-    void add(int index, int element);
-    int removeAt(int index);
-    bool removeItem(int item);
-    int get(int index);
-    void set(int index, int element);
-    bool contains(int item);
+    void add(T element);
+    void add(int index, T element);
+    T removeAt(int index);
+    bool removeItem(T item);
+    T get(int index);
+    void set(int index, T element);
+    bool contains(T item);
     string toString();
     int size();
     bool empty();
     void clear();
-    int indexOf(int item);
+    int indexOf(T item);
     void reverse();
+
+    Iterator begin()
+    {
+        return Iterator(this, true);
+    }
+
+    Iterator end()
+    {
+        return Iterator(this, false);
+    }
+
+public:
+    class Node
+    {
+    private:
+        T data;
+        Node *next;
+        Node *pre;
+        friend class DLinkedList<T>;
+    public:
+        Node()
+        {
+            this->data = 0;
+            this->next = nullptr;
+            this->pre = nullptr;
+        }
+
+        Node(T data, Node *next=nullptr, Node *pre=nullptr) : data(data), next(next), pre(pre) {};
+    };
+
+    class Iterator
+    {
+    private:
+        DLinkedList<T> *pList;
+        Node *current;
+        int index;
+    public:
+        Iterator(DLinkedList<T> *pList, bool begin);
+        Iterator &operator=(const Iterator &iterator);
+        void set(const T &e);
+        T &operator*();
+        bool operator!=(const Iterator &iterator);
+        void remove();
+
+        // Prefix ++ overload
+        Iterator &operator++();
+        // Postfix ++ overload
+        Iterator operator++(int);
+    };
 };
 
 #endif

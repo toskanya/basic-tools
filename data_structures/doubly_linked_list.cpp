@@ -1,218 +1,396 @@
 #include "main.h"
 #include "doubly_linked_list.h"
 
-IntSDoubleLinkedList::IntSDoubleLinkedList() {
-    this->head = new Node();
-    this->count = 0;
+template <class T>
+void DLinkedList<T>::checkIndex(int index)
+{
+    if (index < 0 || index > count)
+        throw out_of_range("Index out of range");
 }
 
-void IntSDoubleLinkedList::checkIndex(int index) {
-    if (index < 0 || index >= count) {
-        throw out_of_range("Index is out of range");
-    }
+template <class T>
+DLinkedList<T>::DLinkedList()
+{
+    head = nullptr;
+    tail = nullptr;
+    count = 0;
 }
 
-void IntSDoubleLinkedList::add(int element) {
-    Node *temp = new Node;
-    temp->data = element;
-
-    if (this->count == 0) {
-        this->head->next = temp;
-    }
-    else {
-        Node * current = this->head;
-
-        while (current->next != nullptr) {
-            current = current->next;
-        }
-
-        current->next = temp;
-        temp->pre = current;
-    }
-
-    this->count++;
+template <class T>
+DLinkedList<T>::~DLinkedList()
+{
+    this->clear();
 }
 
-void IntSDoubleLinkedList::add(int index, int element) {
-    checkIndex(index);
-
-    Node * temp = new Node();
-    temp->data = element;
-    Node * current = this->head;
-
-    for (int i = 0; i < index; i++) {
-        current = current->next;
-    }
-
-    temp->next = current->next;
-    temp->pre = current;
-    current->next = temp;
-    current->next->pre = temp;
-
-    this->count++;
+template <class T>
+void DLinkedList<T>::add(T element)
+{
+    this->add(count, element);
 }
 
-int IntSDoubleLinkedList::removeAt(int index) {
-    checkIndex(index);
+template <class T>
+void DLinkedList<T>::add(int index, T element)
+{
+    this->checkIndex(index);
 
-    Node * temp;
-    Node * current = this->head;
+    Node *new_node = new Node(element);
 
-    if (index == 0 && count == 1) {
-        temp = current->next;
-        this->head = new Node();
+    if (count == 0)
+    {
+        head = new_node;
+        tail = new_node;
     }
-    else {
-        for (int i = 0; i < index; i++) {
-            current = current->next;
-        }
+    else if (index == 0)
+    {
+        new_node->next = head;
+        head->pre = new_node;
+        head = new_node;
+    }
+    else if (index == count)
+    {
+        new_node->pre = tail;
+        tail->next = new_node;
+        tail = new_node;
+    }
+    else
+    {
+        Node *temp = head;
 
-        temp = current->next;
-        current->next = current->next->next;
-
-        if (index != count - 1) {
-            current->next->pre = current;
-        }
+        for (int i = 0; i < index - 1; i++)
+            temp = temp->next;
+        
+        new_node->next = temp->next;
+        new_node->pre = temp;
+        temp->next->pre = new_node;
+        temp->next = new_node;
     }
 
-    int data = temp->data;
+    count++;
+}
+
+template <class T>
+T DLinkedList<T>::removeAt(int index)
+{
+    this->checkIndex(index);
+
+    T result;
+    Node *temp = head;
+
+    for (int i = 0; i < index; i++)
+        temp = temp->next;
+
+    result = temp->data;
+
+    if (count == 1)
+    {
+        head = nullptr;
+        tail = nullptr;
+    }
+    else if (index == 0)
+    {
+        head = head->next;
+        head->pre = nullptr;
+    }
+    else if (index == count - 1)
+    {
+        tail = tail->pre;
+        tail->next = nullptr;
+    }
+    else
+    {
+        temp->next->pre = temp->pre;
+        temp->pre->next = temp->next;
+
+    }
+    
+    temp->next = nullptr;
+    temp->pre = nullptr;
     delete temp;
-    this->count--;
+    count--;
+    return result;
+}
+
+template <class T>
+bool DLinkedList<T>::removeItem(T item)
+{
+    Node *temp = head;
+    int index = 0;
+
+    while (temp != nullptr)
+    {
+        if (temp->data == item)
+        {
+            this->removeAt(index);
+            return true;
+        }
+
+        index++;
+        temp = temp->next;
+    }
+
+    return false;
+}
+
+template <class T>
+T DLinkedList<T>::get(int index)
+{
+    Node *temp = head;
+
+    for (int i = 0; i < index; i++)
+        temp = temp->next;
 
     return temp->data;
 }
 
-bool IntSDoubleLinkedList::removeItem(int item) {
-    Node * current = this->head->next;
-    int index = 0;
+template <class T>
+void DLinkedList<T>::set(int index, T element)
+{
+    Node *temp = head;
 
-    while (current != nullptr) {
-        if (current->data == item) {
-            removeAt(index);
+    for (int i = 0; i < index; i++)
+        temp = temp->next;
+
+    temp->data = element;
+}
+
+template <class T>
+bool DLinkedList<T>::contains(T item)
+{
+    Node *temp = head;
+
+    while (temp != nullptr)
+    {
+        if (temp->data == item)
             return true;
-        }
-        
-        index++;
-        current = current->next;
+        temp = temp->next;
     }
 
     return false;
-} 
-
-int IntSDoubleLinkedList::get(int index) {
-    checkIndex(index);
-
-    Node * current = this->head->next;
-
-    for (int i = 0; i < index; i++) {
-        current = current->next;
-    }
-
-    return current->data;
-}   
-
-void IntSDoubleLinkedList::set(int index, int element) {
-    checkIndex(index);
-
-    Node * current = this->head->next;
-    
-    for (int i = 0; i < index; i++) {
-        current = current->next;
-    }
-
-    current->data = element;
 }
 
-bool IntSDoubleLinkedList::contains(int item) {
-    Node * current = this->head;
+template <class T>
+string DLinkedList<T>::toString()
+{
+    if (count == 0)
+        return "[]";
 
-    while (current != nullptr) {
-        if (current->data == item) {
-            return true;
-        }
-        
-        current = current->next;
-    }
-    
-    return false;
-}
-
-string IntSDoubleLinkedList::toString() {
     stringstream ss;
     ss << "[";
 
-    Node * current = this->head->next;
+    Node *temp = head;
 
-    for (int i = 0; i < this->count - 1; i++) {
-        ss << current->data << ", ";
-        current = current->next;
+    for (int i = 0; i < count - 1; i++)
+    {
+        ss << temp->data << ", ";
+        temp = temp->next;
     }
 
-    if (count == 0) {
-        ss << "]";
-    }
-    else {
-        ss << current->data << "]";
-    }
+    ss << temp->data << "]";
 
     return ss.str();
 }
 
-int IntSDoubleLinkedList::size() {
-    return this->count;
+template <class T>
+int DLinkedList<T>::size()
+{
+    return count;
 }
 
-bool IntSDoubleLinkedList::empty() {
-    return this->count == 0;
+template<class T>
+bool DLinkedList<T>::empty()
+{
+    return count == 0;
 }
 
-void IntSDoubleLinkedList::clear() {
-    Node * current = this->head->next;
-    Node * next = nullptr;
+template<class T>
+void DLinkedList<T>::clear()
+{
+    Node *temp = head;
 
-    while (current != nullptr) {
-        next = current->next;
-        delete current;
-        current = next;
+    for (int i = 0; i < count; i++)
+    {
+        Node *del = temp;
+        temp = temp->next;
+        del->next = nullptr;
+        del->pre = nullptr;
+        delete del;
     }
 
-    delete current;
-    delete next;
-
-    this->head = new Node();
-    this->count = 0;
+    head = nullptr;
+    tail = nullptr;
+    count = 0;
 }
 
-int IntSDoubleLinkedList::indexOf(int item) {
-    Node * current = this->head->next;
+template<class T>
+int DLinkedList<T>::indexOf(T item)
+{
+    Node *temp = head;
     int index = 0;
 
-    while (current != nullptr) {
-        if (current->data == item) {
+    for (int i = 0; i < count; i++)
+    {
+        if (temp->data == item)
             return index;
-        }
-
+        
         index++;
-        current = current->next;
+        temp = temp->next;
     }
 
     return -1;
 }
 
-void IntSDoubleLinkedList::reverse() {
-    Node * current = this->head->next;
-    Node * previous = nullptr;
+template<class T>
+void DLinkedList<T>::reverse()
+{
+    Node *current = head;
+    Node *next = nullptr;
 
-    while (current != nullptr) {
-        current->pre = current->next;
-        current->next = previous;
-        previous = current;
-        current = current->pre;
+    while (current != nullptr)
+    {
+        next = current->next;
+        current->next = current->pre;
+        current->pre = next;
+        current = next;
     }
 
-    this->head->next = previous;
+    Node *temp = head;
+    head = tail;
+    tail = temp;
 }
 
-IntSDoubleLinkedList::~IntSDoubleLinkedList() {
-    this->clear();
+template <class T>
+DLinkedList<T>::Iterator::Iterator(DLinkedList<T> *pList, bool begin)
+{
+    this->pList = pList;
+
+    if (begin)
+    {
+        current = (pList) ? pList->head : nullptr;
+        index = 0;
+    }
+    else
+    {
+        current = nullptr;
+        index = (pList) ? pList->size() : 0;
+    }
+}
+
+template <class T>
+typename DLinkedList<T>::Iterator &DLinkedList<T>::Iterator::operator=(const Iterator &iterator)
+{
+    if (this == &iterator)
+    {
+        return *this;
+    }
+
+    pList = iterator.pList;
+    current = iterator.current;
+    index = iterator.index;
+
+    return *this;
+}
+
+template <class T>
+void DLinkedList<T>::Iterator::set(const T &e)
+{
+    if (!current)
+    {
+        throw out_of_range("Segmentation Fault");
+    }
+    current->data = e;
+}
+
+template <class T>
+T &DLinkedList<T>::Iterator::operator*()
+{
+    if (!current)
+    {
+        throw out_of_range("Segmentation Fault");
+    }
+    return current->data;
+}
+
+template <class T>
+bool DLinkedList<T>::Iterator::operator!=(const Iterator &iterator)
+{
+    return current != iterator.current || index != iterator.index;
+}
+
+template <class T>
+void DLinkedList<T>::Iterator::remove()
+{
+    if (!current)
+    {
+        throw out_of_range("Segmentation Fault");
+    }
+
+    Node * temp = current;
+    current = new Node();
+    current->next = temp->next;
+
+    pList->removeAt(index);
+
+    index--;
+
+    // Node *temp = current;
+
+    // if (temp == pList->head)
+    // {
+    //     pList->head = temp->next;
+    //     if (temp->next)
+    //     {
+    //         temp->next->pre = nullptr;
+    //     }
+    // }
+    // else if (temp == pList->tail)
+    // {
+    //     pList->tail = temp->pre;
+    //     if (temp->pre)
+    //     {
+    //         temp->pre->next = nullptr;
+    //     }
+    //     index--;
+    // }
+    // else 
+    // {
+    //     temp->next->pre = temp->pre;
+    //     temp->pre->next = temp->next;
+    // }
+
+    // current = new Node();
+    // current->next = temp->next;
+    // temp->next = nullptr;
+    // temp->pre = nullptr;
+    // delete temp;
+    // pList->count--;
+    // index--;
+}
+
+template <class T>
+typename DLinkedList<T>::Iterator &DLinkedList<T>::Iterator::operator++()
+{
+    if (!current)
+    {
+        throw out_of_range("Segmentation Fault");
+    }
+
+    current = current->next;
+    index++;
+
+    return *this;
+}
+
+template <class T>
+typename DLinkedList<T>::Iterator DLinkedList<T>::Iterator::operator++(int)
+{
+    if (!current)
+    {
+        throw out_of_range("Segmentation Fault");
+    }
+
+    Iterator temp = *this;
+    current = current->next;
+    index++;
+
+    return temp;
 }
