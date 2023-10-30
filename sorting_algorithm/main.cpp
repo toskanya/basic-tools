@@ -2,11 +2,11 @@
 
 int main()
 {
-    int size = 5;
-    int num_array[size] = {5, 4, 3, 2, 1};
+    int size = 10;
+    int num_array[size] = {5, 4, 3, 2, 1, 9, 8, 7, 6, 0};
     Array *new_arr = new Array(num_array, size);
 
-    new_arr->insertionSort();
+    new_arr->quickSort(0, size - 1);
     new_arr->print();
 
     return 0;
